@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <style name="LaunchTheme" parent="Theme.SplashScreen">
+
+        <!-- Background -->
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+
+        <!-- REMOVE Flutter logo -->
+        <item name="windowSplashScreenAnimatedIcon">@null</item>
+
+        <!-- Optional: duration -->
+        <item name="postSplashScreenTheme">@style/NormalTheme</item>
+
+    </style>
+
+</resources>

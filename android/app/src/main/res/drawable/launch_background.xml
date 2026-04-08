@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Smooth background -->
+    <item>
+        <color android:color="#FFFFFF" />
+    </item>
+
+    <!-- Center logo (proper scaling) -->
+    <item
+        android:width="200dp"
+        android:height="200dp"
+        android:gravity="center">
+
+        <bitmap
+            android:src="@drawable/splash"
+            android:antialias="true"
+            android:filter="true"/>
+    </item>
+
+</layer-list>
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--    &lt;!&ndash; Background &ndash;&gt;-->
+<!--    <item>-->
+<!--        <color android:color="#FFFFFF" />-->
+<!--    </item>-->
+
+<!--    &lt;!&ndash; Center logo &ndash;&gt;-->
+<!--    <item>-->
+<!--        <bitmap-->
+<!--            android:src="@drawable/splash"-->
+<!--            android:gravity="center" />-->
+<!--    </item>-->
+
+<!--</layer-list>-->
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--    &lt;!&ndash; Background color &ndash;&gt;-->
+<!--    <item android:drawable="@android:color/white" />-->
+
+<!--    &lt;!&ndash; Center logo &ndash;&gt;-->
+<!--    <item>-->
+<!--        <bitmap-->
+<!--            android:gravity="center"-->
+<!--            android:src="@drawable/splash" />-->
+<!--    </item>-->
+
+<!--</layer-list>-->
