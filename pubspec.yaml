@@ -21,6 +21,7 @@ dependencies:
   geolocator: ^11.0.0
   local_auth: ^2.2.0
   image_picker: ^1.2.1
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/
 
 flutter_native_splash:
   color: "#0F6B4F"
