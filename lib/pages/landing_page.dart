@@ -117,12 +117,12 @@ class _LandingPageState extends State<LandingPage> {
 
                     reportItem(
                       "Download Project App (APK)",
-                      "https://your-apk-link.com/app-release.apk",
+                      "https://yabatech-attendance-v8.onrender.com/uploads/Attendance.apk",
                     ),
 
                     reportItem(
                       "Download Project Report (PDF)",
-                      "https://your-report-link.com/report.pdf",
+                      "https://yabatech-attendance-v8.onrender.com/uploads/feasibility.pdf",
                     ),
 
                   ],
