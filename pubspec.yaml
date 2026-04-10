@@ -36,7 +36,7 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/
+    - assets/uploads/
 
 flutter_native_splash:
   color: "#0F6B4F"

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,15 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/landing');
+
+      if (kIsWeb) {
+        // 🌐 WEB → Landing Page
+        Navigator.pushReplacementNamed(context, '/landing');
+      } else {
+        // 📱 MOBILE → Login Page
+        Navigator.pushReplacementNamed(context, '/app');
+      }
+
     });
   }
 

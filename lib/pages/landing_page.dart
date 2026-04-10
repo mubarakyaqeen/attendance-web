@@ -16,121 +16,127 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
-              /// 🔰 LOGO
+              /// 🔰 LOGO (BIGGER & CENTERED)
               Image.asset(
                 'assets/app_icon.png',
-                height: 100,
+                height: 120,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
               /// 🏷 TITLE
               const Text(
                 "Project Information Hub",
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: Color(0xFF0D3B1E),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              /// 📝 SUBTITLE
+              const Text(
+                "Access your project and reports easily",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              /// 🔐 LOGIN BUTTON (UNCHANGED LOGIC)
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/app');
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0D3B1E), Color(0xFF1E7D3C)],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.lock, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        "LOGIN",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
               const SizedBox(height: 20),
 
-              /// 👥 GRID (UNCHANGED)
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.75,
-                children: const [
-                  PersonCard(
-                    image: 'assets/person1.webp',
-                    role: 'SUPERVISOR (LECTURER)',
-                    name: 'Mr. Ogundele Isreal',
-                    delay: 0,
-                  ),
-                  PersonCard(
-                    image: 'assets/person2.webp',
-                    role: 'PROJECT ENGINEER',
-                    name: 'YAQEEN MUBARAK OPEYEMI',
-                    delay: 200,
-                  ),
-                  PersonCard(
-                    image: 'assets/person3.jpg',
-                    role: 'PROJECT SUPPORTER',
-                    name: 'OMOWO AYOBAMI ANTHONY',
-                    delay: 400,
-                  ),
-                  PersonCard(
-                    image: 'assets/person4.webp',
-                    role: 'PROJECT SUPPORTER',
-                    name: 'OLAOYE STEPHEN TIMILEYIN',
-                    delay: 600,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 25),
-
-              /// 🔐 LOGIN BUTTON (UNCHANGED)
-              AnimatedButton(
-                text: "LOGIN",
-                color: Colors.green.shade800,
-                textColor: Colors.white,
-                onTap: () {
-                  Navigator.pushNamed(context, '/app');
+              /// 📥 DOWNLOAD BUTTON (UNCHANGED LOGIC)
+              GestureDetector(
+                onTap: () async {
+                  final Uri uri = Uri.parse(
+                    "https://yabatech-attendance-v8.onrender.com/assets/assets/uploads/Attendance.apk",
+                  );
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
-              ),
-
-              const SizedBox(height: 15),
-
-              /// 📥 DOWNLOAD BUTTON (UPDATED)
-              AnimatedButton(
-                text: showDownloads
-                    ? "HIDE PROJECT REPORT ▲"
-                    : "DOWNLOAD PROJECT APP ▼",
-                color: Colors.amber,
-                textColor: Colors.black,
-                onTap: () {
-                  setState(() {
-                    showDownloads = !showDownloads;
-                  });
-                },
-              ),
-
-              /// 🔽 EXPANDABLE SECTION (NEW)
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOut,
-                height: showDownloads ? 180 : 0,
-                child: showDownloads
-                    ? Column(
-                  children: [
-                    const SizedBox(height: 10),
-
-                    reportItem(
-                      "Download Project App (APK)",
-                      "https://yabatech-attendance-v8.onrender.com/uploads/Attendance.apk",
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFFFC107), Color(0xFFFFA000)],
                     ),
-
-                    reportItem(
-                      "Download Project Report (PDF)",
-                      "https://yabatech-attendance-v8.onrender.com/uploads/feasibility.pdf",
-                    ),
-
-                  ],
-                )
-                    : null,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.download, color: Colors.black),
+                      SizedBox(width: 10),
+                      Text(
+                        "DOWNLOAD PROJECT REPORT",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-
-              const SizedBox(height: 10),
             ],
           ),
         ),
