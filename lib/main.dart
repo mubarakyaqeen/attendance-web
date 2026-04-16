@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'screens/splash_screen.dart';
 
-// ✅ NEW IMPORTS (for your pages)
+//  NEW IMPORTS (for your pages)
 import 'pages/landing_page.dart';
 import 'pages/download_page.dart';
 import 'pages/login_page.dart';
@@ -19,12 +20,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      // ✅ KEEP YOUR ORIGINAL SPLASH FLOW
-      home: const SplashFadeWrapper(
-        child: SplashScreen(),
-      ),
+      //  KEEP YOUR ORIGINAL SPLASH FLOW
+    home: kIsWeb
+    ? const SplashFadeWrapper(child: SplashScreen()) // Web
+        : const LoginPage(), // 📱 APK skips splash + landing
 
-      // ✅ ADD ROUTES (NEW)
+      //  ADD ROUTES (NEW)
       routes: {
         '/landing': (context) => const LandingPage(),
         '/download': (context) => const DownloadPage(),

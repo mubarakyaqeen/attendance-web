@@ -34,6 +34,8 @@ class _EnrollCoursesScreenState extends State<EnrollCoursesScreen> {
     token = prefs.getString("token");
 
     final data = await StudentService.getCourses(userId!, token!);
+
+    print("COURSES: $data");
     setState(() {
       courses = data;
       loading = false;

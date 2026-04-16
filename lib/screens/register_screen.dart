@@ -107,6 +107,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+
+
     setState(() {
       isRegistering = true;
     });
@@ -123,6 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         level: selectedLevel!,
 
       );
+
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Registration Successful")),
@@ -285,7 +288,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 DropdownButtonFormField<String>(
                   decoration: inputDecoration("Level", Icons.school),
                   value: selectedLevel,
-                  items: ["ND 1", "ND 2", "HND 1", "HND 2"]
+                  items: ["ND1", "ND2", "HND1", "HND2"]
                       .map((level) => DropdownMenuItem(
                     value: level,
                     child: Text(level),

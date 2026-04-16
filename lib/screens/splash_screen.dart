@@ -20,21 +20,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(const Duration(seconds: 2), () {
-
-      if (kIsWeb) {
-        // 🌐 WEB → Landing Page
-        Navigator.pushReplacementNamed(context, '/landing');
-      } else {
-        // 📱 MOBILE → Login Page
-        Navigator.pushReplacementNamed(context, '/app');
-      }
-
-    });
+    startApp(); //  THIS IS THE FIX
   }
 
   Future<void> startApp() async {
+
+    if (kIsWeb) {
+      Navigator.pushReplacementNamed(context, '/landing');
+      return;
+    }
 
     await Future.delayed(const Duration(seconds: 3));
 
@@ -140,7 +134,7 @@ class _PremiumSplashUIState extends State<_PremiumSplashUI>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                // 🔰 LOGO
+                //  LOGO
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -155,14 +149,14 @@ class _PremiumSplashUIState extends State<_PremiumSplashUI>
                     ],
                   ),
                   child: Image.asset(
-                    "assets/images/yabatech_logo.png", // 👈 PUT YOUR LOGO HERE
+                    "assets/images/yabatech_logo.png", //  PUT YOUR LOGO HERE
                     height: 120,
                   ),
                 ),
 
                 const SizedBox(height: 30),
 
-                // 🏫 APP NAME
+                //  APP NAME
                 const Text(
                   "Student Attendance System",
                   textAlign: TextAlign.center,
@@ -187,7 +181,7 @@ class _PremiumSplashUIState extends State<_PremiumSplashUI>
 
                 const SizedBox(height: 40),
 
-                // ⏳ LOADING INDICATOR
+                //  LOADING INDICATOR
                 const SizedBox(
                   width: 30,
                   height: 30,
