@@ -48,25 +48,37 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
     final url =
     Uri.parse("$baseUrl/lecturer/${widget.lecturerId}/courses");
 
-    final response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer ${widget.token}"
-      },
-    );
+    try {
 
-    if(response.statusCode == 200){
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${widget.token}"
+        },
+      );
 
-      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
 
-      setState(() {
-        courses = data;
+        final data = jsonDecode(response.body);
 
-        if(courses.isNotEmpty){
-          selectedCourseId = courses[0]["id"];
-        }
-      });
+        if (!mounted) return;   // 🔥 FIX (prevents crash)
 
+        setState(() {
+          courses = data;
+
+          if (courses.isNotEmpty) {
+            selectedCourseId = courses[0]["id"];
+          }
+        });
+
+      }
+
+    } catch (e) {
+
+      if (!mounted) return;   // 🔥 FIX (also for errors)
+
+      // Optional: you can log or show error
+      print("Error fetching courses: $e");
     }
   }
 
@@ -79,27 +91,56 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
         "$baseUrl/lecturer/${widget.lecturerId}/active-session"
     );
 
-    final response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer ${widget.token}"
-      },
-    );
+    try {
 
-    if(response.statusCode == 200){
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${widget.token}"
+        },
+      );
 
-      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
 
-      setState(() {
-        activeSession = data;
-      });
+        if (response.body.isEmpty) {
+          print("Empty response from server");
 
-    } else {
+          if (!mounted) return;
+
+          setState(() {
+            activeSession = null;
+          });
+
+          return;
+        }
+
+        final data = jsonDecode(response.body);
+
+        if (!mounted) return;   // 🔥 prevents crash
+
+        setState(() {
+          activeSession = data;
+        });
+
+      } else {
+
+        if (!mounted) return;
+
+        setState(() {
+          activeSession = null;
+        });
+
+      }
+
+    } catch (e) {
+      print("Error fetching active session: $e");
+
+      if (!mounted) return;
+
       setState(() {
         activeSession = null;
       });
     }
-
   }
 
   /*
@@ -504,5 +545,12 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
         ),
       ),
     );
+  }
+
+
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

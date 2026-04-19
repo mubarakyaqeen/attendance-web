@@ -14,6 +14,7 @@ class StudentDashboardModel {
 
   final List<String> courses;
 
+  // ✅ KEEP THESE CLEAN
   final String? startedAt;
   final int durationMinutes;
 
@@ -49,30 +50,9 @@ class StudentDashboardModel {
 
       alreadyMarked: json["alreadyMarked"] ?? false,
 
-      startedAt: json["startedAt"],
-      durationMinutes: json["durationMinutes"] ?? 0,
+      // 🔥 FINAL FIX (MOST IMPORTANT)
+      startedAt: json["startTime"],        // ← FIXED KEY
+      durationMinutes: json["duration"] ?? 0, // ← FIXED KEY
     );
   }
-
-
-  // factory StudentDashboardModel.fromJson(Map<String, dynamic> json) {
-  //
-  //   return StudentDashboardModel(
-  //
-  //     fullName: json["fullName"],
-  //     matricNumber: json["matricNumber"],
-  //
-  //     sessionId: json["sessionId"],
-  //     courseCode: json["courseCode"],
-  //     courseId: json['courseId'],
-  //     courseTitle: json["courseTitle"],
-  //     lecturerName: json["lecturerName"],
-  //
-  //     radius: json["radius"] ?? 0,
-  //
-  //     courses: List<String>.from(json["courses"] ?? []),
-  //
-  //     alreadyMarked: json["alreadyMarked"] ?? false,
-  //   );
-  // }
 }

@@ -282,9 +282,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                     lecturerName: student.lecturerName!,
                                     radius: student.radius,
 
-                                    // 🔥 TEMP FIX (important)
-                                    durationMinutes: student.durationMinutes,
-                                    startedAt: student.startedAt ?? DateTime.now().toString(),
+                                    // ✅ FRONTEND FALLBACK FIX
+                                    durationMinutes: student.durationMinutes == 0
+                                        ? 10
+                                        : student.durationMinutes,
+
+                                    startedAt: student.startedAt ?? DateTime.now().toIso8601String(),
                                   ),
                                 ),
                               );

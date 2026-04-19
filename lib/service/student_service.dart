@@ -315,7 +315,7 @@ GET ATTENDANCE HISTORY
     }
   }
 
-  static Future<void> markAttendanceV2({
+  static Future<Map<String, dynamic>> markAttendanceV2({
     required int studentId,
     required int sessionId,
     required String token,
@@ -337,9 +337,26 @@ GET ATTENDANCE HISTORY
       }),
     );
 
+    print("📡 STATUS: ${response.statusCode}");
+    print("📦 BODY: ${response.body}");
+
+    // ❌ ERROR CASE
     if (response.statusCode != 200) {
-      throw Exception(response.body);
+      throw Exception(
+        response.body.isEmpty
+            ? "Failed to mark attendance"
+            : response.body,
+      );
     }
+
+
+
+    // ✅ SUCCESS CASE
+    if (response.body.isEmpty) {
+      return {"message": "Attendance marked successfully"};
+    }
+
+    return jsonDecode(response.body);
   }
 
 

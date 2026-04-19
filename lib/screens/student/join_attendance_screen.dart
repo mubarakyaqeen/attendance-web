@@ -57,19 +57,20 @@ class _JoinAttendanceScreenState extends State<JoinAttendanceScreen> {
   Timer? _timer;
   Duration remainingTime = Duration.zero;
 
+  // ✅ SAFE setState
+  void safeSetState(VoidCallback fn) {
+    if (!mounted) return;
+    setState(fn);
+  }
+
   @override
   void initState() {
     super.initState();
 
-    // ✅ dynamic radius from backend
     allowedRadius = widget.radius.toDouble();
 
-    // 🔥 debug
-    checkBiometrics();
-
-    // Countdown function
-    startCountdown();
-
+    checkBiometrics();     // async safe
+    startCountdown();      // timer safe
   }
 
   /*
@@ -159,14 +160,11 @@ class _JoinAttendanceScreenState extends State<JoinAttendanceScreen> {
         throw Exception("User not found");
       }
 
-      // 🔥 GET ACTIVE SESSION FROM BACKEND
-      // final sessionId = await StudentService.getActiveSessionId(
-      //   courseId: widget.courseId,
-      //   token: widget.token,
-      // );
+      print("➡️ Marking attendance...");
+      print("studentId: $userId");
+      print("sessionId: ${widget.sessionId}");
 
-      // 🔥 USE IT
-      await StudentService.markAttendanceV2(
+      final result = await StudentService.markAttendanceV2(
         studentId: userId,
         sessionId: widget.sessionId,
         token: widget.token,
@@ -174,6 +172,11 @@ class _JoinAttendanceScreenState extends State<JoinAttendanceScreen> {
         longitude: 0,
       );
 
+      print("✅ API RESPONSE: $result");
+
+      if (!mounted) return;   // 🔥 IMPORTANT
+
+      // ✅ SUCCESS NAVIGATION
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -183,10 +186,13 @@ class _JoinAttendanceScreenState extends State<JoinAttendanceScreen> {
 
     } catch (e) {
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      print("❌ ERROR: $e");
 
+      if (!mounted) return;   // 🔥 IMPORTANT
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed: ${e.toString()}")),
+      );
     }
   }
 
@@ -430,37 +436,52 @@ class _JoinAttendanceScreenState extends State<JoinAttendanceScreen> {
             SizedBox(
               width: double.infinity,
               height: 50,
-
               child: ElevatedButton(
 
+                onPressed: () async {
 
+                  // 🔥 DEBUG (optional)
+                  print("insideRadius: $insideRadius");
+                  print("remainingTime: ${remainingTime.inSeconds}");
 
-
-                onPressed: (insideRadius && remainingTime.inSeconds > 0)
-                    ? () async {
-
-                  // 🔥 Step 1: Fingerprint / Face check
-                  bool isAuthenticated = await authenticateUser();
-
-                  if (!isAuthenticated) {
+                  // ❌ LOCATION CHECK
+                  if (!insideRadius) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("Authentication failed"),
+                        content: Text("❌ You are outside the allowed location"),
                       ),
                     );
                     return;
                   }
 
-                  // 🔥 Step 2: Mark attendance
+                  // ❌ SESSION EXPIRED CHECK
+                  if (remainingTime.inSeconds <= 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("⛔ Session has expired"),
+                      ),
+                    );
+                    return;
+                  }
+
+                  // 🔥 BIOMETRIC AUTH
+                  bool isAuthenticated = await authenticateUser();
+
+                  if (!isAuthenticated) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("❌ Authentication failed"),
+                      ),
+                    );
+                    return;
+                  }
+
+                  // 🔥 MARK ATTENDANCE
                   await markAttendance();
-
-                }
-                    : null,
-
+                },
 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryGreen,
-                  disabledBackgroundColor: Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -490,28 +511,42 @@ class _JoinAttendanceScreenState extends State<JoinAttendanceScreen> {
 FOR DEBUGGING OF BIOMETRICS
 =================================
  */
-  void checkBiometrics() async {
-    final biometrics = await auth.getAvailableBiometrics();
-    print("Biometrics available: $biometrics");
+
+  Future<void> checkBiometrics() async {
+    try {
+      final biometrics = await auth.getAvailableBiometrics();
+
+      if (!mounted) return;   // 🔥 safety check
+
+      print("Biometrics available: $biometrics");
+
+    } catch (e) {
+      print("Biometric error: $e");
+    }
   }
 
   void startCountdown() {
     final start = DateTime.parse(widget.startedAt);
     final end = start.add(Duration(minutes: widget.durationMinutes));
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _timer?.cancel(); // 🔥 prevent duplicate timers
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+
+      if (!mounted) {
+        timer.cancel();   // 🔥 CRITICAL FIX
+        return;
+      }
 
       final now = DateTime.now();
       final diff = end.difference(now);
-
-      if (!mounted) return;
 
       setState(() {
         remainingTime = diff.isNegative ? Duration.zero : diff;
       });
 
       if (diff.isNegative) {
-        _timer?.cancel();
+        timer.cancel();   // 🔥 stop timer when finished
       }
     });
   }
@@ -521,6 +556,7 @@ FOR DEBUGGING OF BIOMETRICS
     Function to dispose after expiration
   =======================================
   */
+
   @override
   void dispose() {
     _timer?.cancel();
